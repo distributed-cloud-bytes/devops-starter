@@ -1,0 +1,14 @@
+name: Event-Driven DevOps Starter
+description: >
+  Open-source local platform for event-driven systems — Kafka-compatible broker (Redpanda),
+  Schema Registry, PostgreSQL, topic catalog, DLQ pattern, health scripts, and CI validation.
+category: devops
+owner: distributed-cloud-bytes
+tags:
+  - event-driven
+  - kafka
+  - redpanda
+  - docker-compose
+  - schema-registry
+  - devops
+  - platform-starter

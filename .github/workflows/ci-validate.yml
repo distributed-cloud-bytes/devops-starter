@@ -1,0 +1,34 @@
+name: CI Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main, feat/**]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate YAML
+        run: |
+          pip install pyyaml
+          python - <<'PY'
+          import pathlib, yaml
+          root = pathlib.Path(".")
+          files = list(root.rglob("*.yml")) + list(root.rglob("*.yaml"))
+          for path in files:
+              yaml.safe_load(path.read_text(encoding="utf-8"))
+          print(f"Validated {len(files)} YAML files")
+          PY
+
+      - name: Validate compose
+        run: docker compose -f environments/dev/compose/docker-compose.yml config >/dev/null
+
+      - name: Shell syntax
+        run: |
+          shopt -s globstar
+          for f in scripts/**/*.sh environments/**/*.sh; do
+            [ -f "$f" ] && bash -n "$f"
+          done

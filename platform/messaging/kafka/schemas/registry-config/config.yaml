@@ -1,0 +1,6 @@
+compatibility: BACKWARD
+subjects:
+  - name: order.created.v1-value
+    compatibility: BACKWARD
+  - name: order.cancelled.v1-value
+    compatibility: BACKWARD

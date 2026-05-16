@@ -1,0 +1,6 @@
+dlqSuffix: .dlq
+topics:
+  - order.created.v1
+  - order.cancelled.v1
+  - inventory.reserved.v1
+  - payment.captured.v1
