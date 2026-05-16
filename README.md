@@ -17,10 +17,11 @@ cd devops-starter
 ## Quick start
 
 ```bash
-cd environments/dev/compose
-docker compose up -d
-docker compose ps
+make up
+# or: cd environments/dev/compose && docker compose up -d
 ```
+
+Full stack with observability: [docs/getting-started-full-stack.md](docs/getting-started-full-stack.md)
 
 Verify Schema Registry:
 
@@ -66,6 +67,16 @@ scripts/                    Health and resilience helpers
 ## Define Kafka topics
 
 No domain topics are pre-created. Add yours in `platform/messaging/kafka/topics/topic-definitions.yaml` and follow **[docs/messaging-topics.md](docs/messaging-topics.md)**.
+
+## Commands
+
+| Command | Action |
+|---------|--------|
+| `make up` | Start dev stack |
+| `make down` | Stop stack |
+| `make topics-init` | Re-run topic creation after YAML changes |
+| `make validate` | Validate Compose config |
+| `make health` | Schema Registry (+ optional Postgres) check |
 
 ## Companion starter
 

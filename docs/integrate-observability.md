@@ -1,8 +1,19 @@
 # Integrate observability-starter
 
-1. Clone [observability-starter](https://github.com/distributed-cloud-bytes/observability-starter)
-2. Start this dev stack: `cd environments/dev/compose && docker compose up -d`
-3. Start observability: `docker compose up -d` in the observability repo
-4. In `prometheus/prometheus.yml`, scrape your app or broker metrics on published host ports
+1. Start this stack (creates Docker network `platform-dev`):
 
-Shared Docker network (optional): create an external network and attach both compose files to `platform-dev`.
+   ```bash
+   make up
+   ```
+
+2. Clone [observability-starter](https://github.com/distributed-cloud-bytes/observability-starter).
+
+3. Start observability on the same network:
+
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose.platform-network.yml up -d
+   ```
+
+4. Add scrape jobs — see observability [docs/scrape-targets.md](https://github.com/distributed-cloud-bytes/observability-starter/blob/main/docs/scrape-targets.md).
+
+Define Kafka topics first: [messaging-topics.md](messaging-topics.md).
