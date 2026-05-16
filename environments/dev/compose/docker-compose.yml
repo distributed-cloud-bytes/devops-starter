@@ -64,6 +64,11 @@ services:
     depends_on:
       redpanda:
         condition: service_healthy
+    environment:
+      KAFKA_DEFAULT_PARTITIONS: "3"
+      KAFKA_DEFAULT_REPLICATION: "1"
     volumes:
       - ./kafka/init-topics.sh:/init-topics.sh:ro
+      - ../../../platform/messaging/kafka/topics/topic-definitions.yaml:/topics/topic-definitions.yaml:ro
+      - ../../../platform/messaging/kafka/dlq/dlq-topics.yaml:/topics/dlq-topics.yaml:ro
     entrypoint: ["/bin/bash", "/init-topics.sh"]

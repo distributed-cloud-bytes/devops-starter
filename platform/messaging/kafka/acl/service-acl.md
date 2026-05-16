@@ -1,9 +1,9 @@
 # Kafka ACL policy (documentation template)
 
-Replace principals with your production identity mechanism (SASL, mTLS, etc.).
+Define principals and topic permissions for your environment. This file is not enforced by the local Compose stack (PLAINTEXT dev mode).
 
 | Principal | Produce | Consume |
 |-----------|---------|---------|
-| svc-order | order.created.v1, order.cancelled.v1 | inventory.reserved.v1 |
-| svc-inventory | inventory.reserved.v1 | order.created.v1 |
-| svc-payment | payment.captured.v1 | order.cancelled.v1 |
+| svc-example | your.topic.a.v1 | your.topic.b.v1 |
+
+Replace with your service names and topic names from `topics/topic-definitions.yaml`.

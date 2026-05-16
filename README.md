@@ -35,7 +35,7 @@ curl -s http://localhost:18081/subjects
 | PostgreSQL 16 | 5433 | DB `platform`, user/password `platform` |
 | Redpanda (Kafka API) | 19092 | Local broker |
 | Schema Registry | 18081 | Confluent-compatible API |
-| kafka-init | — | One-shot topic creation |
+| kafka-init | — | Creates topics **only if you define them** (see [docs/messaging-topics.md](docs/messaging-topics.md)) |
 
 ## Connect your applications
 
@@ -58,10 +58,14 @@ spring.datasource.url=jdbc:postgresql://localhost:5433/platform
 
 ```text
 environments/dev/compose/   Docker Compose stack
-platform/messaging/kafka/   Topic catalog and DLQ list
+platform/messaging/kafka/   Your topic catalog (empty by default) and optional DLQ
 loadtests/                  k6 smoke test (Schema Registry)
 scripts/                    Health and resilience helpers
 ```
+
+## Define Kafka topics
+
+No domain topics are pre-created. Add yours in `platform/messaging/kafka/topics/topic-definitions.yaml` and follow **[docs/messaging-topics.md](docs/messaging-topics.md)**.
 
 ## Companion starter
 

@@ -1,0 +1,12 @@
+# Copy entries into topic-definitions.yaml — this file is NOT applied automatically.
+
+defaultPartitions: 3
+defaultReplicationFactor: 1
+
+topics:
+  - name: my-domain.event.created.v1
+    partitions: 3
+    replicationFactor: 1
+  - name: my-domain.event.cancelled.v1
+    partitions: 3
+    replicationFactor: 1

@@ -1,6 +1,8 @@
+# Optional dead-letter topics. See docs/messaging-topics.md
+
 dlqSuffix: .dlq
-topics:
-  - order.created.v1
-  - order.cancelled.v1
-  - inventory.reserved.v1
-  - payment.captured.v1
+
+# When true, kafka-init also creates "<main-topic><dlqSuffix>" for each topic in topic-definitions.yaml
+autoFromMainTopics: false
+
+topics: []

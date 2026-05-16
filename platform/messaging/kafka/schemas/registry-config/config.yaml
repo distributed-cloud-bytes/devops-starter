@@ -1,6 +1,6 @@
+# Schema Registry subject settings. Add subjects when you register Avro/JSON schemas.
+# See docs/messaging-topics.md
+
 compatibility: BACKWARD
-subjects:
-  - name: order.created.v1-value
-    compatibility: BACKWARD
-  - name: order.cancelled.v1-value
-    compatibility: BACKWARD
+
+subjects: []
