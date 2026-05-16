@@ -1,0 +1,7 @@
+# Topics created on stack startup (kafka-init). Leave empty to start without any topics.
+# See docs/messaging-topics.md and topic-definitions.example.yaml.
+
+defaultPartitions: 3
+defaultReplicationFactor: 1
+
+topics: []

@@ -1,0 +1,6 @@
+# Schema Registry subject settings. Add subjects when you register Avro/JSON schemas.
+# See docs/messaging-topics.md
+
+compatibility: BACKWARD
+
+subjects: []

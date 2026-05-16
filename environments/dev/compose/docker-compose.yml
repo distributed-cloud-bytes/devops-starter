@@ -1,0 +1,87 @@
+name: platform-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dcb-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-platform}
+      POSTGRES_USER: ${POSTGRES_USER:-platform}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-platform}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-platform} -d ${POSTGRES_DB:-platform}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - platform-dev
+
+  redpanda:
+    image: redpandadata/redpanda:v24.1.6
+    container_name: dcb-redpanda
+    restart: unless-stopped
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp
+      - "1"
+      - --memory
+      - 1G
+      - --reserve-memory
+      - 0M
+      - --check=false
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://redpanda:9092
+    ports:
+      - "${KAFKA_HOST_PORT:-19092}:9092"
+    healthcheck:
+      test: ["CMD-SHELL", "rpk topic list --brokers localhost:9092 >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - platform-dev
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.5
+    container_name: dcb-schema-registry
+    restart: unless-stopped
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    ports:
+      - "${SCHEMA_REGISTRY_PORT:-18081}:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: redpanda:9092
+    networks:
+      - platform-dev
+
+  kafka-init:
+    image: redpandadata/redpanda:v24.1.6
+    container_name: dcb-kafka-init
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    environment:
+      KAFKA_DEFAULT_PARTITIONS: "3"
+      KAFKA_DEFAULT_REPLICATION: "1"
+    volumes:
+      - ./kafka/init-topics.sh:/init-topics.sh:ro
+      - ../../../platform/messaging/kafka/topics/topic-definitions.yaml:/topics/topic-definitions.yaml:ro
+      - ../../../platform/messaging/kafka/dlq/dlq-topics.yaml:/topics/dlq-topics.yaml:ro
+    entrypoint: ["/bin/bash", "/init-topics.sh"]
+    networks:
+      - platform-dev
+
+networks:
+  platform-dev:
+    name: platform-dev
+    driver: bridge
