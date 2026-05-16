@@ -2,6 +2,15 @@
 
 Generic **event-driven DevOps** starter from [Distributed Cloud Bytes](https://github.com/distributed-cloud-bytes). Run a local messaging and data plane without shipping application code in this repository.
 
+## Standalone or combined?
+
+| Mode | What you do | Needs the other repo? |
+|------|-------------|------------------------|
+| **Standalone** | Clone this repo → `make up` → connect your apps to Kafka/Postgres | **No** |
+| **With observability** | Start this repo, then follow [docs/integrate-observability.md](docs/integrate-observability.md) | Optional — only if you want Prometheus/Grafana |
+
+Each repository is independent. Nothing in Compose requires [observability-starter](https://github.com/distributed-cloud-bytes/observability-starter).
+
 ## Clone
 
 ```bash
@@ -20,8 +29,6 @@ cd devops-starter
 make up
 # or: cd environments/dev/compose && docker compose up -d
 ```
-
-Full stack with observability: [docs/getting-started-full-stack.md](docs/getting-started-full-stack.md)
 
 Verify Schema Registry:
 
@@ -78,11 +85,11 @@ No domain topics are pre-created. Add yours in `platform/messaging/kafka/topics/
 | `make validate` | Validate Compose config |
 | `make health` | Schema Registry (+ optional Postgres) check |
 
-## Companion starter
+## Optional: run with observability-starter
 
-Metrics and dashboards: [observability-starter](https://github.com/distributed-cloud-bytes/observability-starter)
-
-Integration guide: [docs/integrate-observability.md](docs/integrate-observability.md)
+1. Start this repo: `make up`
+2. Follow [docs/integrate-observability.md](docs/integrate-observability.md) (clone observability-starter second)
+3. Or use the full walkthrough: [docs/getting-started-full-stack.md](docs/getting-started-full-stack.md)
 
 ## Contributing
 
