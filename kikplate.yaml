@@ -4,6 +4,7 @@ description: >
   Schema Registry, PostgreSQL, topic catalog, DLQ pattern, health scripts, and CI validation.
 category: devops
 owner: distributed-cloud-bytes
+verification_token: f10b75f9-5e08-4d0e-a52a-f46b7ced5c0a
 tags:
   - event-driven
   - kafka
