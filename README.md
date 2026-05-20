@@ -5,54 +5,46 @@
 
 Generic **event-driven DevOps** starter from [Distributed Cloud Bytes](https://github.com/distributed-cloud-bytes). Run a local messaging and data plane without shipping application code in this repository.
 
-**Full documentation:** see the [docs](docs/README.md) folder (architecture, configuration, messaging topics, operations, development, observability integration, and full-stack walkthrough).
+## Overview
 
-## Standalone or combined?
+| Topic | Description |
+|-------|-------------|
+| **Standalone use** | Clone this repo, run `make up`, and connect your apps to Kafka and PostgreSQL. No other repository required. |
+| **Combined with observability-starter** | Start this stack first, then follow [Integrate observability-starter](docs/integrate-observability.md) for Prometheus and Grafana on `platform-dev`. |
+| **PostgreSQL** | Local relational store on host port `5433` (database and role `platform` by default). |
+| **Redpanda** | Kafka-compatible broker on host port `19092`. |
+| **Schema Registry** | Confluent-compatible API on host port `18081`. |
+| **Topic catalog** | No domain topics pre-created; define yours in `platform/messaging/kafka/topics/topic-definitions.yaml`. |
+| **kafka-init** | One-shot Compose job that creates topics from your YAML catalog when the stack starts or when you run `make topics-init`. |
 
-| Mode | What you do | Needs the other repo? |
-|------|-------------|------------------------|
-| **Standalone** | Clone this repo → `make up` → connect your apps to Kafka/Postgres | **No** |
-| **With observability** | Start this repo, then follow [docs/integrate-observability.md](docs/integrate-observability.md) | Optional — only if you want Prometheus/Grafana |
+---
 
-Each repository is independent. Nothing in Compose requires [observability-starter](https://github.com/distributed-cloud-bytes/observability-starter).
+## Quick Start
 
-## Clone
+The fastest way to run the platform locally is with Docker Compose.
 
-```bash
+```sh
 git clone https://github.com/distributed-cloud-bytes/devops-starter.git
 cd devops-starter
-```
 
-## Prerequisites
-
-- Docker Desktop or Docker Engine with Compose v2
-- ~4 GB free RAM
-
-## Quick start
-
-```bash
 make up
 # or: cd environments/dev/compose && docker compose up -d
 ```
 
 Verify Schema Registry:
 
-```bash
+```sh
 curl -s http://localhost:18081/subjects
 ```
-
-## What runs
 
 | Service | Host port | Notes |
 |---------|-----------|--------|
 | PostgreSQL 16 | 5433 | DB `platform`, user/password `platform` |
 | Redpanda (Kafka API) | 19092 | Local broker |
 | Schema Registry | 18081 | Confluent-compatible API |
-| kafka-init | — | Creates topics **only if you define them** (see [docs/messaging-topics.md](docs/messaging-topics.md)) |
+| kafka-init | — | Creates topics only if defined in YAML |
 
-## Connect your applications
-
-From the host machine:
+Connect from the host:
 
 | Variable | Example |
 |----------|---------|
@@ -60,47 +52,91 @@ From the host machine:
 | Schema Registry | `http://localhost:18081` |
 | JDBC | `jdbc:postgresql://localhost:5433/platform` |
 
-Spring Boot example:
+**Prerequisites:** Docker Desktop or Docker Engine with Compose v2, and about 4 GB free RAM.
 
-```properties
-spring.kafka.bootstrap-servers=localhost:19092
-spring.datasource.url=jdbc:postgresql://localhost:5433/platform
+Install the CLI to scaffold this plate from a terminal.
+
+## Install CLI
+
+### macOS/Linux via Homebrew tap
+
+```sh
+brew tap kikplate/homebrew-kikplate
+brew install kikplate
 ```
 
-## Repository layout
+### Windows via Scoop
 
-```text
+```powershell
+scoop bucket add kikplate https://github.com/kikplate/scoop-bucket.git
+scoop install kikplate
+```
+
+### Manual install from release archives (all platforms)
+
+```sh
+# Linux/macOS
+tar -xzf kikplate-<version>-linux-amd64.tar.gz
+sudo install kikplate-<version>-linux-amd64 /usr/local/bin/kikplate
+
+# macOS example
+tar -xzf kikplate-<version>-darwin-arm64.tar.gz
+sudo install kikplate-<version>-darwin-arm64 /usr/local/bin/kikplate
+```
+
+```powershell
+# Windows (PowerShell)
+Expand-Archive .\kikplate-<version>-windows-amd64.zip -DestinationPath .
+Move-Item .\kikplate-<version>-windows-amd64.exe kikplate.exe
+# Add the folder containing kikplate.exe to PATH
+```
+
+### Build from source
+
+```sh
+go install github.com/kikplate/kikplate/cli@latest
+```
+
+Quick sanity check:
+
+```sh
+kikplate --help
+kikplate config init
+kikplate login
+kikplate search --category devops
+kikplate scaffold distributed-cloud-bytes/event-driven-devops-starter my-platform
+```
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Architecture](docs/architecture.md) | Postgres, Redpanda, Schema Registry, kafka-init, and Docker network `platform-dev` |
+| [Configuration](docs/configuration.md) | Compose path, environment variables, and port or credential overrides |
+| [Messaging topics](docs/messaging-topics.md) | Topic catalog YAML, DLQ options, Schema Registry notes, verification |
+| [Operations](docs/operations.md) | Make targets, health checks, logs, topic re-init, troubleshooting |
+| [Development](docs/development.md) | Compose validation, CI, scripts, load tests, contribution workflow |
+| [Integrate observability-starter](docs/integrate-observability.md) | Optional Prometheus/Grafana on the shared platform network |
+| [Full stack walkthrough](docs/getting-started-full-stack.md) | Order of operations for devops-starter plus observability-starter |
+| [Contributing](CONTRIBUTING.md) | Fork, branch, PR expectations, and doc maintenance |
+
+---
+
+## Repository Layout
+
+```
 environments/dev/compose/   Docker Compose stack
-platform/messaging/kafka/   Your topic catalog (empty by default) and optional DLQ
-docs/                       Documentation index and integration guides
+platform/messaging/kafka/   Topic catalog (empty by default) and optional DLQ
+docs/                       Documentation
 loadtests/                  k6 smoke test (Schema Registry)
 scripts/                    Health and resilience helpers
+.github/                    CI workflows
 ```
 
-## Define Kafka topics
-
-No domain topics are pre-created. Add yours in `platform/messaging/kafka/topics/topic-definitions.yaml` and follow **[docs/messaging-topics.md](docs/messaging-topics.md)**.
-
-## Commands
-
-| Command | Action |
-|---------|--------|
-| `make up` | Start dev stack |
-| `make down` | Stop stack |
-| `make topics-init` | Re-run topic creation after YAML changes |
-| `make validate` | Validate Compose config |
-| `make health` | Schema Registry (+ optional Postgres) check |
-
-## Optional: run with observability-starter
-
-1. Start this repo: `make up`
-2. Follow [docs/integrate-observability.md](docs/integrate-observability.md) (clone observability-starter second)
-3. Or use the full walkthrough: [docs/getting-started-full-stack.md](docs/getting-started-full-stack.md)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Open issues and pull requests in this repository.
+---
 
 ## License
 
-[Apache License 2.0](LICENSE)
+[LICENSE](LICENSE)
