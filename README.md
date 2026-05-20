@@ -129,7 +129,6 @@ kikplate scaffold distributed-cloud-bytes/event-driven-devops-starter my-platfor
 | [Integrate observability-starter](docs/integrate-observability.md) | Optional Prometheus/Grafana on the shared platform network |
 | [Full stack walkthrough](docs/getting-started-full-stack.md) | Order of operations for devops-starter plus observability-starter |
 | [Contributing](CONTRIBUTING.md) | Fork, branch, PR expectations, and doc maintenance |
-| [Kikplate badges](docs/BADGES.md) | Badge slugs and how to request Official on Kikplate |
 
 ---
 
