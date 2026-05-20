@@ -14,6 +14,6 @@
    docker compose -f docker-compose.yml -f docker-compose.platform-network.yml up -d
    ```
 
-4. Add scrape jobs — see observability [docs/scrape-targets.md](https://github.com/distributed-cloud-bytes/observability-starter/blob/main/docs/scrape-targets.md).
+4. Add scrape jobs — see the observability documentation [index](https://github.com/distributed-cloud-bytes/observability-starter/blob/main/docs/README.md) and [scrape targets](https://github.com/distributed-cloud-bytes/observability-starter/blob/main/docs/scrape-targets.md).
 
 Define Kafka topics first: [messaging-topics.md](messaging-topics.md).

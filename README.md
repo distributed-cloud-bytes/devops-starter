@@ -1,6 +1,11 @@
 # devops-starter
 
+[![View on KikPlate](https://img.shields.io/static/v1?label=KikPlate&message=event-driven-devops-starter&color=0366d6&style=flat-square)](https://kikplate.dev/plates/event-driven-devops-starter)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 Generic **event-driven DevOps** starter from [Distributed Cloud Bytes](https://github.com/distributed-cloud-bytes). Run a local messaging and data plane without shipping application code in this repository.
+
+**Full documentation:** see the [docs](docs/README.md) folder (architecture, configuration, messaging topics, operations, development, observability integration, and full-stack walkthrough).
 
 ## Standalone or combined?
 
@@ -67,6 +72,7 @@ spring.datasource.url=jdbc:postgresql://localhost:5433/platform
 ```text
 environments/dev/compose/   Docker Compose stack
 platform/messaging/kafka/   Your topic catalog (empty by default) and optional DLQ
+docs/                       Documentation index and integration guides
 loadtests/                  k6 smoke test (Schema Registry)
 scripts/                    Health and resilience helpers
 ```
